@@ -10,6 +10,9 @@ pub fn start_thread_cut_char(
 ) -> JoinHandle<()> {
     spawn(move || {
         for l in from_read {
+            if l.len() < start {
+                continue;
+            }
             let (a, _b) = l.split_at(end);
             let (_c, d) = a.split_at(start);
             if to_write.send(d.to_string()).is_err() {
@@ -28,7 +31,7 @@ pub fn start_thread_cut_field(
 ) -> JoinHandle<()> {
     spawn(move || {
         for l in from_read {
-            let v: Vec<&str> = l.rsplit(delimit).collect();
+            let v: Vec<&str> = l.split(delimit).collect();
             if to_write.send(v.get(field).unwrap().to_string()).is_err() {
                 println!("error sending to write");
                 return;

@@ -21,7 +21,7 @@ impl Default for Paramcli {
 impl Paramcli {
     pub fn new() -> Paramcli {
         let mut fic = String::new();
-        let mut fist = 0;
+        let mut first = 0;
         let mut last = 0;
         let mut delim = ' ';
         let mut field = 0;
@@ -34,8 +34,8 @@ impl Paramcli {
             .take(1)
             .next()
             .unwrap_or_else(|| String::from("cut"));
-        if args.len() > 2 {
-            println!("Error: too many parameters");
+        if args.len() < 2 {
+            println!("Error: not enough parameters");
             help(&name);
         }
         for arg in args {
@@ -54,7 +54,7 @@ impl Paramcli {
             if charmode {
                 //split arg
                 //get 2 numbers
-                let v: Vec<&str> = arg.rsplit('-').collect();
+                let v: Vec<&str> = arg.split('-').collect();
                 if v.len() != 2 {
                     println!("syntaxe error near -c");
                     help(&name);
@@ -68,7 +68,7 @@ impl Paramcli {
                     }
                     Ok(v) => v,
                 };
-                fist = r;
+                first = r;
                 let r: usize = match v.get(1).unwrap().parse() {
                     Err(e) => {
                         println!("erreur {}", e);
@@ -80,6 +80,10 @@ impl Paramcli {
                 };
                 last = r;
                 charmode = false;
+                if last < first {
+                    println!("{} is lower than {}", last, first);
+                    help(&name);
+                }
                 continue;
             }
             if fieldmode {
@@ -92,7 +96,7 @@ impl Paramcli {
                     }
                     Ok(v) => v,
                 };
-                field = r;
+                field = r - 1;
                 fieldmode = false;
                 continue;
             }
@@ -120,7 +124,7 @@ impl Paramcli {
         }
         Paramcli {
             fic,
-            firstcar: fist,
+            firstcar: first,
             lastcar: last,
             field,
             delim,
@@ -134,8 +138,8 @@ fn help(name: &str) {
     println!("parameters between [] are optionnals");
     println!("------------------------------------");
     println!("fic: file to work with (if non use stdin");
-    println!("-c n-m: get caractes n to m");
-    println!("-f o: get firleld in position o");
-    println!("-d p: use p param to identify fields");
+    println!("-c n-m: get caractes n to m   (m must be lesser than m)");
+    println!("-f o: get field in position o");
+    println!("-d p: use p delimiter to identify fields");
     std::process::exit(0);
 }
