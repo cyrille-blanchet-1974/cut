@@ -47,11 +47,14 @@ impl Paramcli {
                 help(&name);
             }
             if delimmode {
+                //println!("DEBUG delimmode");
                 delim = arg.chars().next().unwrap();
                 delimmode = false;
+                //println!("DEBUG fin delimmode");
                 continue;
             }
             if charmode {
+                //println!("DEBUG charmode");
                 //split arg
                 //get 2 numbers
                 let v: Vec<&str> = arg.split('-').collect();
@@ -84,9 +87,11 @@ impl Paramcli {
                     println!("{} is lower than {}", last, first);
                     help(&name);
                 }
+                //println!("DEBUG fin charmode");
                 continue;
             }
             if fieldmode {
+                //println!("DEBUG fieldmode");
                 let r: usize = match arg.parse() {
                     Err(e) => {
                         println!("erreur {}", e);
@@ -96,24 +101,34 @@ impl Paramcli {
                     }
                     Ok(v) => v,
                 };
+                if r == 0 {
+                    println!("syntaxe error near -f");
+                    help(&name);
+                }
                 field = r - 1;
                 fieldmode = false;
+                //println!("DEBUG fin fieldmode");
                 continue;
             }
             if arg == "-c" {
+                //println!("DEBUG param -c");
                 charmode = true;
                 continue;
             }
             if arg == "-f" {
+                //println!("DEBUG param -f");
                 fieldmode = true;
                 continue;
             }
             if arg == "-d" {
+                //println!("DEBUG param -d");
                 delimmode = true;
                 continue;
             }
+            //println!("DEBUG param file");
             fic = arg;
         }
+        //println!("DEBUG fin paramcli");
         //checks
         if !fic.is_empty() {
             //check if file exists

@@ -32,9 +32,14 @@ pub fn start_thread_cut_field(
     spawn(move || {
         for l in from_read {
             let v: Vec<&str> = l.split(delimit).collect();
-            if to_write.send(v.get(field).unwrap().to_string()).is_err() {
-                println!("error sending to write");
-                return;
+            match v.get(field) {
+                None => {}
+                Some(x) => {
+                    if to_write.send(x.to_string()).is_err() {
+                        println!("error sending to write");
+                        return;
+                    }
+                }
             }
         }
     })

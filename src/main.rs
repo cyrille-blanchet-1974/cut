@@ -14,6 +14,13 @@ pub fn traitement(p: &Paramcli) {
     let (to_compute, from_read) = channel();
     let (to_write, from_compute) = channel();
 
+    /*
+    println!(
+        "DEBUG analyze de {} param c={}/{} d={} f={}",
+        &p.fic, &p.firstcar, &p.lastcar, &p.delim, &p.field
+    );
+    */
+
     let hread = if !p.fic.is_empty() {
         start_thread_read_file(to_compute, &p.fic)
     } else {
