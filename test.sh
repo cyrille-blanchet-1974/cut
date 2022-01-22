@@ -47,11 +47,12 @@ $prg -f -10 -d : test.fic
 echo expected: error
 pause
 
-$prg -f 2 -d ;  test.fic
+$prg -f 2 -d + test.fic
+#$prg -f 2 -d + test.fic
 echo expected: nothing
 pause
 
-$prg -f 1 -d ; test.fic
+$prg -f 1 -d + test.fic
 echo expected: full file
 pause
 
