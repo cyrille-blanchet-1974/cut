@@ -1,7 +1,7 @@
 @echo off
 call build.cmd
 
-set prg=.\targe\debug\cut.exe
+set prg=.\target\debug\cut.exe
 
 echo 12345678901234567890123456>test.fic
 echo abcdefghijklmnopqrstuvwxyz>>test.fic
